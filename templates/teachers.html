@@ -14,5 +14,27 @@
 				</div>
 			{% endfor %}
 		</div>
+		<div>
+			<h2>Add Staff:</h2>
+			<form method="POST" action="{{url_for('ui.addteacher',lang=lang)}}" id="addform">
+				<label for="name">Name:</label>
+				<input type="text" name="name"/><br/>
+				<label for="emails">Emails:</label><br/>
+				<input type="text" name="emails" id="emails"/><br/>
+				<input type="submit" value="Submit" id='submit'/>
+			</form>
+			<button id='newemail'> New Email</button>
+		</div>
+		<script>
+			function newemail(){
+				var form = document.getElementById('addform')
+				var newElement = document.createElement('input')
+				newElement.type='text'
+				newElement.name='emails'
+				form.insertBefore(newElement,document.getElementById('submit'))
+				form.insertBefore(document.createElement('br'),document.getElementById('submit'))
+			}
+			document.getElementById('newemail').onclick=newemail
+		</script>
 	</body>
 </html>

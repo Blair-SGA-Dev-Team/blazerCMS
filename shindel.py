@@ -263,3 +263,14 @@ def addlunchevent(lang):
 def teachers(lang):
     teacherdata=json.loads(from_log('data/'+lang+'/teachers',0,'end'))['data']
     return render_template('teachers.html',lang=lang,teachers=teacherdata)
+
+@ui.route('<lang>/teachers/add',methods=["POST"])
+@sessionvalidated
+def addteacher(lang):
+    formdict = request.form.to_dict(flat=False)
+    content = {'name':formdict['name'][0],'emails':formdict['emails']}
+    name = next_element(lang,'teachers')
+    with open('data/'+lang+'/teachers/'+name,'w') as f:
+        f.write(json.dumps(content))
+    update_log('data/'+lang+'/teachers',name)
+    return redirect(url_for('ui.teachers',lang=lang))
