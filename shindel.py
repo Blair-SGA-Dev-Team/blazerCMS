@@ -274,3 +274,23 @@ def addteacher(lang):
         f.write(json.dumps(content))
     update_log('data/'+lang+'/teachers',name)
     return redirect(url_for('ui.teachers',lang=lang))
+
+@ui.route('<lang>/teachers/del',methods=["POST"])
+@sessionvalidated
+def delteacher(lang):
+    newitem=json.loads(from_log('data/'+lang+'/teachers',0,'end'))['data'][int(request.form['num'])]
+    if str(newitem) == str(request.form['value']):
+        del_log('data/'+lang+'/teachers',int(request.form['num']))
+        return redirect(url_for('ui.teachers',lang=lang))
+    else:
+        return "Please do not use this API incorrectly"
+
+@ui.route('<lang>/teachers/update',methods=["POST"])
+@sessionvalidated
+def updteacher(lang):
+    clone = request.form.to_dict(flat=False);
+    num = int(clone['num'][0])
+    clone['name']=clone['name'][0]
+    del clone['num']
+    update_element_using_index('data/'+lang+'/teachers',num,clone)
+    return redirect(url_for("ui.teachers",lang=lang))

@@ -4,13 +4,24 @@
 			<h2>Staff:</h2>
 			{% for teacher in teachers %}
 				<div style='border-width:1px;border-style:solid'>
-					<h3>{{teacher.name}}</h3>
-					<h4>Emails:</h4>
-					<ul>
-						{% for email in teacher.emails %}
-							<li>{{email}}</li>
-						{% endfor %}
-					</ul>
+					<form action="{{url_for('ui.updteacher',lang=lang)}}" method="POST" id="upForm">
+						<input type='text' style="font-size: 1.17em; font-weight: bolder;border:0; font-family: \"Times New Roman\", Times, serif;" name="name" value="{{teacher.name}}"><br/>
+						<h4>Emails:</h4>
+						<ul id="emaillst">
+							{% for email in teacher.emails %}
+								<li><input type='text' style="border:0;width:100%" name="emails" value="{{email}}"></li>
+							{% endfor %}
+						</ul>
+						<input type="hidden" name="num" value={{loop.index-1}}>
+						<button id='updemail'>New Email</button>
+						<br/>
+						<input type="submit" value="Update">
+					</form>
+					<form action={{url_for("ui.delteacher",lang=lang)}} method="POST">
+						<input type="hidden" name="num" value={{loop.index-1}}>
+						<input type="hidden" name="value" value="{{teacher}}">
+						<input type="submit" value="Delete">
+					</form>
 				</div>
 			{% endfor %}
 		</div>
@@ -35,6 +46,15 @@
 				form.insertBefore(document.createElement('br'),document.getElementById('submit'))
 			}
 			document.getElementById('newemail').onclick=newemail
+			
+			function updemail() {
+				var form = document.getElementById('upForm')
+				var newElement = document.createElement('input')
+				newElement.type='text'
+				newElement.name='emails'
+				document.getElementById("emaillst").appendChild(newElement)
+			}
+			document.getElementById('updemail').onclick=updemail
 		</script>
 	</body>
 </html>
