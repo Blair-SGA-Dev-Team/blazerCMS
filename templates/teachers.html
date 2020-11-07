@@ -9,7 +9,7 @@
 						<h4>Emails:</h4>
 						<ul id="emaillst">
 							{% for email in teacher.emails %}
-								<li><input type='text' style="border:0;width:100%" name="emails" value="{{email}}"></li>
+								<li><input type='text' style="border:0;width:100%; font-family: \"Times New Roman\", Times, serif;" name="emails" value="{{email}}"></li>
 							{% endfor %}
 						</ul>
 						<input type="hidden" name="num" value={{loop.index-1}}>

@@ -146,7 +146,7 @@ def updevent(lang):
     update_element_using_index('data/'+lang+'/events',num,clone)
     return redirect(url_for("ui.events",lang=lang))
 
-@ui.route('/<lang>/new',methods=["GET","POST"])
+@ui.route('/<lang>/new',methods=["GET"])
 @sessionvalidated
 def new(lang):
     page=int(request.args.get('page',0))
@@ -155,20 +155,21 @@ def new(lang):
         page = 0
     elif page > (len(newlog)-1) // 5:
         page = (len(newlog)-1)//5
-    if request.method == "GET":
-        return render_template('new.html',news=newlog[page*5:page*5+5],page=page,lang=lang)
-    else:
-        name = next_element(lang,'new')
-        content = {
-            'icon':base64.b64encode(request.files['icon'].read()).decode(),
-            'name':request.form['name'],
-            'date':request.form['date']
-        }
-        with open('data/'+lang+'/new/'+name,'w') as f:
-            f.write(json.dumps(content))
-        update_log('data/'+lang+'/new',name)
-        newlog.insert(0,content)
-        return render_template('new.html',news=newlog[page*5:page*5+5],page=page,lang=lang)
+    return render_template('new.html',news=newlog[page*5:page*5+5],page=page,lang=lang)
+    
+@ui.route('<lang>/new/add',methods=["POST"])
+@sessionvalidated
+def addnew(lang):
+    name = next_element(lang,'new')
+    content = {
+        'icon':base64.b64encode(request.files['icon'].read()).decode(),
+        'name':request.form['name'],
+        'date':request.form['date']
+    }
+    with open('data/'+lang+'/new/'+name,'w') as f:
+        f.write(json.dumps(content))
+    update_log('data/'+lang+'/new',name)
+    return redirect(url_for('ui.new',lang=lang))
 
 @ui.route('/<lang>/new/del',methods=["POST"])
 @sessionvalidated
@@ -179,6 +180,16 @@ def delnew(lang):
         return redirect(url_for('ui.new',lang=lang))
     else:
         return "Please do not use this API incorrectly"
+
+@ui.route('<lang>/new/update',methods=["POST"])
+@sessionvalidated
+def updnew(lang):
+    clone = request.form.to_dict();
+    num = int(clone['num'])
+    del clone['num']
+    clone['icon'] = base64.b64encode(request.files['icon'].read()).decode()
+    update_element_using_index('data/'+lang+'/new',num,clone)
+    return redirect(url_for("ui.new",lang=lang))
 
 @ui.route('<lang>/clubs')
 @sessionvalidated
