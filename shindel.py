@@ -209,6 +209,20 @@ def addclub(lang):
         json.dump({'clubs':clubdata},f)
     return redirect(url_for('ui.clubs',lang=lang))
 
+@ui.route('<lang>/clubs/update',methods=["POST"])
+@sessionvalidated
+def updclub(lang):
+    clone = request.form.to_dict()
+    index=int(clone['index'])
+    del clone['index']
+    with open('data/'+lang+'/clubs.json') as f:
+        opdata = json.load(f)['clubs']
+    opdata[index] = clone
+    opdata=sorted(opdata,key=lambda x:x['name'])
+    with open('data/'+lang+'/clubs.json','w') as f:
+        json.dump({'clubs':opdata},f)
+    return redirect(url_for('ui.clubs',lang=lang))
+
 @ui.route('<lang>/clubs/del',methods=["POST"])
 @sessionvalidated
 def delclub(lang):
@@ -235,6 +249,19 @@ def addSslOp(lang):
     with open('data/'+lang+'/sslOps.json') as f:
         opdata = json.load(f)['ops']
     opdata.insert(0,request.form.to_dict())
+    with open('data/'+lang+'/sslOps.json','w') as f:
+        json.dump({'ops':opdata},f)
+    return redirect(url_for('ui.sslOps',lang=lang))
+
+@ui.route('<lang>/sslOps/update',methods=["POST"])
+@sessionvalidated
+def updSslOp(lang):
+    clone = request.form.to_dict()
+    index=int(clone['index'])
+    del clone['index']
+    with open('data/'+lang+'/sslOps.json') as f:
+        opdata = json.load(f)['ops']
+    opdata[index] = clone
     with open('data/'+lang+'/sslOps.json','w') as f:
         json.dump({'ops':opdata},f)
     return redirect(url_for('ui.sslOps',lang=lang))

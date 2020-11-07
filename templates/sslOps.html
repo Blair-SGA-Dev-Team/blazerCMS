@@ -1,12 +1,21 @@
 <html>
+	<head>
+		<link rel="stylesheet" href="{{url_for('static',filename='inputstyle.css')}}"/>
+	</head>
 	<body>
 		<h2>SSL Opportunities:</h2>
 		{% for op in ops %}
 			<div style='border-width:1px;border-style:solid'>
-				<h3>{{op.title}}</h3>
-				<p>{{op.text}}</p>
-				<p>Location: {{op.loc}}</p>
-				<p>Teacher: {{op.teacher}}</p>
+				<form method="POST" action="{{url_for('ui.updSslOp',lang=lang)}}">
+					<input type='text' class="h3" name="title" value="{{op.title}}"><br/>
+					<input type='text' class="p" name="text" value="{{op.text}}"><br/>
+					<label for="loc">Location:</label>
+					<input type='text' class="p" name="loc" value="{{op.loc}}"><br/>
+					<label for="teacher">Teacher:</label>
+					<input type='text' class="p" name="teacher" value="{{op.teacher}}"><br/>
+					<input type='hidden' name='index' value='{{loop.index-1}}'/>
+					<input type="submit" value="Update">
+				</form>
 				<form action="{{url_for('ui.delSslOp',lang=lang)}}" method="POST">
 					<input type="hidden" name="op" value="{{op}}"/>
 					<input type="hidden" name="index" value="{{loop.index-1}}"/>
