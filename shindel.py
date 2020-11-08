@@ -296,6 +296,31 @@ def addlunchevent(lang):
         json.dump(lunchdata,f)
     return redirect(url_for('ui.lunchevents',lang=lang))
 
+@ui.route('<lang>/lunchEvents/update',methods=["POST"])
+@sessionvalidated
+def updlunchevent(lang):
+    with open('data/'+lang+'/lunchEvents.json') as f:
+        lunchdata = json.load(f)
+    clone = request.form.to_dict()
+    index = int(clone['index'])
+    del clone['index']
+    lunchdata[index] = clone
+    with open('data/'+lang+'/lunchEvents.json','w') as f:
+        json.dump(lunchdata,f)
+    return redirect(url_for('ui.lunchevents',lang=lang))
+
+@ui.route('<lang>/lunchEvents/del',methods=["POST"])
+@sessionvalidated
+def dellunchevent(lang):
+    with open('data/'+lang+'/lunchEvents.json') as f:
+        lunchdata = json.load(f)
+    index = int(request.form['index'])
+    if str(request.form['value'])==str(lunchdata[index]):
+        del lunchdata[index]
+    with open('data/'+lang+'/lunchEvents.json','w') as f:
+        json.dump(lunchdata,f)
+    return redirect(url_for('ui.lunchevents',lang=lang))
+
 @ui.route('<lang>/teachers')
 @sessionvalidated
 def teachers(lang):

@@ -1,11 +1,24 @@
 <html>
+	<head>
+		<link rel="stylesheet" href="{{url_for('static',filename='inputstyle.css')}}"/>
+	</head>
 	<body>
 		<h2>Lunch Events:</h2>
 		{% for event in events %}
 			<div style='border-width:1px;border-style:solid'>
-				<h3>{{event.title}}</h3>
-				<p>{{event.text}}</p>
-				<p>Location: {{event.loc}}</p>
+				<form method="POST" action="{{url_for('ui.updlunchevent',lang=lang)}}">
+					<input class="h3" name="title" value="{{event.title}}"/><br/>
+					<input class="p" name="text" value="{{event.text}}"/><br/>
+					<label for="loc">Location:</label>
+					<input class="p" id="loc" name="loc" value="{{event.loc}}"/><br/>
+					<input type="hidden" name="index" value="{{loop.index-1}}"/>
+					<input type="submit" value="Update"/>
+				</form>
+				<form method="POST" action="{{url_for('ui.dellunchevent',lang=lang)}}">
+					<input type="hidden" name="value" value="{{event}}">
+					<input type="hidden" name="index" value="{{loop.index-1}}">
+					<input type="submit" value="Delete">
+				</form>
 			</div>
 		{% endfor %}
 		<h2>Create Lunch Event:</h2>
