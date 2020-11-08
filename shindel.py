@@ -357,3 +357,17 @@ def updteacher(lang):
     del clone['num']
     update_element_using_index('data/'+lang+'/teachers',num,clone)
     return redirect(url_for("ui.teachers",lang=lang))
+
+@ui.route('<lang>/challenge')
+@sessionvalidated
+def challenge(lang):
+    with open('data/'+lang+'/challenge.json') as f:
+        challenge = json.load(f)
+    return render_template('challenge.html',lang=lang,challenge=challenge)
+
+@ui.route('<lang>/challenge/set',methods=["POST"])
+@sessionvalidated
+def setchallenge(lang):
+    with open('data/'+lang+'/challenge.json','w') as f:
+        json.dump({'title':str(request.form['title']),'text':str(request.form['text'])},f)
+    return redirect(url_for("ui.challenge",lang=lang))

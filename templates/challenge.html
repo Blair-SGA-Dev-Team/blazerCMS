@@ -1,0 +1,13 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="{{url_for('static',filename='inputstyle.css')}}"/>
+	</head>
+	<body>
+		<h2>Student of the Week</h2>
+		<form method="POST" action="{{url_for('ui.setchallenge',lang=lang)}}">
+			<input class="h3" name="title" value="{{challenge.title}}"><br/>
+			<input class="p" name="text" value="{{challenge.text}}"><br/>
+			<input type="submit" value="Update"/>
+		</form>
+	</body>
+</html>
